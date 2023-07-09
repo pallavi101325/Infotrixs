@@ -8,4 +8,4 @@ FROM openjdk:11-jdk-slim
 EXPOSE 8081
 COPY --from=build /build/libs/user_registration-1.jar app.jar
 
-ENTRYPOINT ["java" , "-jar " , "app.jar"]
+ENTRYPOINT ["java" , "-jar" , "app.jar"]
