@@ -1,37 +1,11 @@
-# Use a Windows-based Docker image with OpenJDK installed
-FROM mcr.microsoft.com/java/jdk:11-windowsservercore-ltsc2019 AS build
+FROM ubuntu:latest AS build
+RUN apt-get update
+RUN apt-get install openjdk-11-jdk -y
+COPY . .
+RUN ./gradlew build
 
-# Set the working directory
-WORKDIR /app
-
-# Copy the Gradle wrapper files
-COPY gradlew .
-COPY gradle gradle
-
-# Copy the build configuration files
-COPY settings.gradle .
-COPY build.gradle .
-
-# Copy the project source code
-COPY src src
-
-# Download and cache the Gradle distribution
-RUN .\gradlew --version
-
-# Build the project
-RUN .\gradlew build
-
-# Use a Windows-based Docker image with OpenJDK installed
-FROM openjdk:11-jdk-windowsservercore
-
-# Set the working directory
-WORKDIR /app
-
-# Copy the JAR file from the previous build stage
-COPY --from=build /app/build/libs/demo-1.jar app.jar
-
-# Expose the desired port (if needed)
+FROM openjdk:11-jdk-slim
 EXPOSE 8081
+COPY --from=build /build/libs/demo-1.jar app.jar
 
-# Set the entry point command
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java" , "-jar " , "app.jar"]
