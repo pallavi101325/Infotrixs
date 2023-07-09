@@ -1,5 +1,5 @@
 # Use a Windows-based Docker image with OpenJDK installed
-FROM openjdk:11-jdk-windowsservercore AS build
+FROM mcr.microsoft.com/java/jdk:11-windowsservercore-ltsc2019 AS build
 
 # Set the working directory
 WORKDIR /app
